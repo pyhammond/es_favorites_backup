@@ -1,0 +1,71 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+ES Gamelist backup/restore written by Peter Y. Hammond
+©2017 Peter Y. Hammond.  All rights reserved.
+
+This XML parser is written to backup your gamelist.xml file,
+which is used by EmulationStation.
+
+Specifically, it backs up 4 tag elements so that you can scrape
+and re-build your gamelist.xml contents, and then restore these
+four tags to all files as appropriate.
+
+The four tags that it backs up are:
+<favorite>	- If you marked the game as a "Favorite"
+<kidgame>	- If you marked the game as a "Kid Game" - for "Kid Mode"
+<playcount>	- How many times you've played the game
+<lastplayed>	- When you last played the game (used for "recently played")
+"""
+
+from xml.dom.minidom import parse
+import uuid
+import os
+
+try:
+	execfile('./.games__')
+except IOError:
+	print('No Backup File Found!')
+	exit()
+
+xml_file = 'gamelist.xml'
+dom = parse(xml_file)
+gamelist = dom.getElementsByTagName('gameList')[0]
+exclude_games = ['neogeo.zip']
+
+def tag(node, name, default = None):
+	x = node.getElementsByTagName(name)
+	return x[0].firstChild.data.strip() if x and x[0] else default
+
+def prettify(xml):
+    return '\n'.join([line for line in xml.toprettyxml(indent=' '*3, encoding='utf-8').split('\n') if line.strip()])
+
+def addchild(node, child_name, child_contents):
+	child = dom.createElement(child_name)
+	content = dom.createTextNode(str(child_contents))
+	child.appendChild(content)
+	node.appendChild(child)
+
+for game in gamelist.getElementsByTagName('game'):
+	n = tag(game, 'path')[2:]
+	if '/' in n or n in exclude_games:
+		gamelist.removeChild(game)
+		continue
+	s = games[n] if n in games.keys() else False
+	if s:
+		check_items = {
+			'favorite'  : tag(game, 'favorite', 'false').lower(),
+			'kidgame'   : tag(game, 'kidgame', 'false').lower(),
+			'playcount' : int(tag(game, 'playcount', 0)),
+			'lastplayed': tag(game, 'lastplayed')
+		}
+		for key in check_items.keys():
+			if s[key] not in [0, 'false', check_items[key]]:
+				addchild(game, key, s[key])
+
+unique_filename = '.' + str(uuid.uuid4())
+with open(unique_filename, 'w') as file:
+	file.write(prettify(dom))
+os.unlink(xml_file)
+os.rename(unique_filename, xml_file)
+print("Restore complete !")

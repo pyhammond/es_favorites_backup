@@ -1,0 +1,51 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+ES Gamelist backup/restore written by Peter Y. Hammond
+©2017 Peter Y. Hammond.  All rights reserved.
+
+This XML parser is written to backup your gamelist.xml file,
+which is used by EmulationStation.
+
+Specifically, it backs up 4 tag elements so that you can scrape
+and re-build your gamelist.xml contents, and then restore these
+four tags to all files as appropriate.
+
+The four tags that it backs up are:
+<favorite>	- If you marked the game as a "Favorite"
+<kidgame>	- If you marked the game as a "Kid Game" - for "Kid Mode"
+<playcount>	- How many times you've played the game
+<lastplayed>	- When you last played the game (used for "recently played")
+"""
+
+from xml.dom.minidom import parse
+
+def tag(node, name, default = None):
+	"""	returns the contents of the first child tag found in a DOM node
+		if it can't find a child tag with the given name, return the default given
+	"""
+	x = node.getElementsByTagName(name)
+	return x[0].firstChild.data.strip() if x and x[0] else default
+
+games = {}
+try:
+	gamelist = parse('gamelist.xml').getElementsByTagName('gameList')[0]
+except IOError:
+	print("I couldn't find the gamelist.xml file anywhere !")
+	exit()
+
+for game in gamelist.getElementsByTagName('game'):
+	n = tag(game, 'path')[2:]
+	f = tag(game, 'favorite', 'false').lower()
+	k = tag(game, 'kidgame', 'false').lower()
+	c = int(tag(game, 'playcount', 0))
+	p = tag(game, 'lastplayed')
+	if f == 'true' or k == 'true' or c or p:
+		games[n] = {'favorite':f, 'kidgame':k, 'playcount':c, 'lastplayed':p}
+
+if (games):
+	with open('.games__', 'w') as file:
+		file.write('games=' + str(games))
+	print("Backup complete !")
+else:
+	print('Nothing to save !')

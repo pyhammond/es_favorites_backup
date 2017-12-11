@@ -1,0 +1,15 @@
+#!/bin/bash
+ROMDIR='/home/pi/RetroPie/roms'
+IFS=$'\n'
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BACKSCRIPT="$SCRIPTDIR/fav_backup_one"
+
+for file in `find $ROMDIR -type f -name "gamelist.xml"`
+do
+	dir="$(dirname $file)"
+	echo -n Processing $dir ... 
+	cd $dir
+	python "$BACKSCRIPT"
+	cd $ROMDIR
+done
+echo "All Backups Complete !"
