@@ -1,6 +1,6 @@
 # es_favorites_backup
 
-A group of scripts I wrote to allow you to backup your Favorites / Kids Games / Last Played XML data so you can run a scraper and update your `gamelist.xml` files without losing all of your favorites / kids games / last played / play counts, etc.
+A group of scripts I wrote to allow you to backup your Favorites / Kids Games / Last Played XML data from [Emulation Station](https://github.com/Aloshi/EmulationStation) so you can run a [scraper](https://github.com/sselph/scraper) and update your `gamelist.xml` files without losing all of your favorites / kids games / last played / play counts, etc.
 
 ### Installation Instructions
 
@@ -18,7 +18,7 @@ Running this will simply parse through all of your `gamelist.xml` files and back
 
 ### fav_restore
 
-This will simply restore all of your saved favorites / kids games / last played / play counts back into your `gamelist.xml` files system-wide after you have scraped and re-generated your `gamelist.xml` files used by Emulation Station.
+This will simply restore all of your saved favorites / kids games / last played / play counts back into your `gamelist.xml` files system-wide after you have scraped and re-generated your `gamelist.xml` files used by [Emulation Station](https://github.com/Aloshi/EmulationStation).
 
 ### Credits
 
