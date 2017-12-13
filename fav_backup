@@ -1,5 +1,7 @@
 #!/bin/bash
 ROMDIR='/home/pi/RetroPie/roms'
+BAKDIR='/home/pi/.favorites'
+TODAY=`date '+%Y-%m-%d_%H-%M-%S'`.zip
 IFS=$'\n'
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BACKSCRIPT="$SCRIPTDIR/fav_backup_one"
@@ -12,4 +14,10 @@ do
 	python "$BACKSCRIPT"
 	cd $ROMDIR
 done
+
+mkdir -m 0750 -p "$BAKDIR"
+zip -9 -r "$BAKDIR/$TODAY" */.games__
+cd "$BAKDIR"
+ln -sf "$TODAY" current.zip
+
 echo "All Backups Complete !"

@@ -1,8 +1,12 @@
 #!/bin/bash
 ROMDIR='/home/pi/RetroPie/roms'
+BAKFILE='/home/pi/.favorites/current.zip'
 IFS=$'\n'
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 RESTORESCRIPT="$SCRIPTDIR/fav_restore_one"
+
+cd "$ROMDIR"
+unzip -o "$BAKFILE"
 
 for file in `find $ROMDIR -type f -name "gamelist.xml"`
 do
