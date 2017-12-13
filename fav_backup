@@ -16,7 +16,7 @@ do
 done
 
 mkdir -m 0750 -p "$BAKDIR"
-zip -9 -r "$BAKDIR/$TODAY" */.games__
+zip -m -9 "$BAKDIR/$TODAY" */.games__
 cd "$BAKDIR"
 ln -sf "$TODAY" current.zip
 
