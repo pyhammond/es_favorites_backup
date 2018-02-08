@@ -1,0 +1,18 @@
+#!/bin/bash
+ROMDIR='/home/pi/RetroPie/roms'
+IFS=$'\n'
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CLEANSCRIPT="$SCRIPTDIR/clean_gamelist_one"
+
+cd $ROMDIR
+
+for file in `find $ROMDIR -type f -name "gamelist.xml"`
+do
+	dir="$(dirname $file)"
+	echo -n Processing $dir ... 
+	cd $dir
+	. "$CLEANSCRIPT"
+	echo " done"
+	cd $ROMDIR
+done
+echo "Cleanup Complete !"

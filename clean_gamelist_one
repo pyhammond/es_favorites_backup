@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mv -f gamelist.xml gamelistxml.bak
+grep -v '<favorite>\|<kidgame>\|<playcount>\|<lastplayed>' gamelistxml.bak > gamelist.xml
+rm -f gamelistxml.bak
